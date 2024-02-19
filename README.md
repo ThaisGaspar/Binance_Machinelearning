@@ -1,6 +1,6 @@
 # Binance_Machinelearning
 
-# Porpose
+# Purpose
 This is a project to predict the price of different crypto currancies using machine learning model.
 
 # Data 
