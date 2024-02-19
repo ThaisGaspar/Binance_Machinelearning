@@ -5,6 +5,8 @@ from datetime import datetime
 import os
 from time import sleep
 
+# Test to verify API
+
 api_key = "my API_key"
 api_secret = "my API_secret"
 client = Client(api_key, api_secret)
