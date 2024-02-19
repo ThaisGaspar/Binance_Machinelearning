@@ -1,0 +1,25 @@
+#import libraries
+
+import pandas as pd
+from binance.client import Client
+import pytz
+from datetime import datetime
+import os
+from time import sleep
+
+#access API
+api_key = 'secret'
+api_secret = 'secret'
+client = Client(api_key, api_secret)
+def obter_dados_ticker(symbol):
+    ticker = client.get_ticker(symbol=symbol)
+    return {
+        f"{symbol} Preço Atual": float(ticker['lastPrice']),
+        f"{symbol} Máximo 24h": float(ticker['highPrice']),
+        f"{symbol} Mínimo 24h": float(ticker['lowPrice']),
+        f"{symbol} Variação Percentual 24h": float(ticker['priceChangePercent']),
+        f"{symbol} Volume 24h": float(ticker['volume']),
+        f"{symbol} Número de Negociações": int(ticker['count']),
+        f"{symbol} Preço de Abertura": float(ticker['openPrice']),
+        f"{symbol} Preço de Fechamento": float(ticker['prevClosePrice']),
+    }
