@@ -1,0 +1,53 @@
+import pandas as pd
+from binance.client import Client
+import pytz
+from datetime import datetime
+import os
+from time import sleep
+
+for x in range(10):
+
+    api_key = 'secret'
+    api_secret = 'secret'
+    client = Client(api_key, api_secret)
+    def obter_dados_ticker(symbol):
+        ticker = client.get_ticker(symbol=symbol)
+        return {
+            f"{symbol} Preço Atual": float(ticker['lastPrice']),
+            f"{symbol} Máximo 24h": float(ticker['highPrice']),
+            f"{symbol} Mínimo 24h": float(ticker['lowPrice']),
+            f"{symbol} Variação Percentual 24h": float(ticker['priceChangePercent']),
+            f"{symbol} Volume 24h": float(ticker['volume']),
+            f"{symbol} Número de Negociações": int(ticker['count']),
+            f"{symbol} Preço de Abertura": float(ticker['openPrice']),
+            f"{symbol} Preço de Fechamento": float(ticker['prevClosePrice']),
+        }
+
+    dados_btc = obter_dados_ticker("BTCUSDT")
+    dados_eth = obter_dados_ticker("ETHBRL")
+    dados_xrp = obter_dados_ticker("XRPUSDT")
+    dados_ltc = obter_dados_ticker("LTCUSDT")
+
+    dados_combinados = {**dados_btc, **dados_eth, **dados_xrp, **dados_ltc}
+    df = pd.DataFrame([dados_combinados])
+
+
+    # Obtendo a data e hora atual no fuso horário de Brasília
+    fuso_horario_br = pytz.timezone('America/Sao_Paulo')
+    data_hora_br = datetime.now(fuso_horario_br).strftime("%d-%m-%Y %H:%M:%S")
+    data_hora_arquivo = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+    # Adicionando a data e hora ao DataFramedshj
+    df['Data e Hora Atual (BR)'] = data_hora_br
+
+    raw_binance_path = r'C:\Users\thaga\PycharmProjects\pythonProject\binance_raw'
+
+    pasta = raw_binance_path
+    if not os.path.exists(pasta):
+        os.makedirs(pasta)
+    nome_arquivo = f'{pasta}/dados_{data_hora_arquivo}.csv'
+    df.to_csv(nome_arquivo, index=False)
+    print('dados_salvos')
+    print(df)
+
+    sleep(10)
